@@ -5,19 +5,31 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Services\BasketService;
+use App\Repositories\ProductRepository;
+use App\Repositories\DeliveryShippingRuleRepository;
+use App\Strategies\PricingStrategyInterface;
 use App\Models\Product;
+use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
-
 
 class BasketServiceTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected ProductRepository|MockInterface $productRepository;
+    protected DeliveryShippingRuleRepository|MockInterface $shippingRuleRepository;
+    protected PricingStrategyInterface|MockInterface $pricingStrategy;
     protected BasketService $basketService;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Create mock repositories
+        $this->productRepository = app(ProductRepository::class);
+        $this->shippingRuleRepository = app(DeliveryShippingRuleRepository::class);
+        $this->pricingStrategy = app(PricingStrategyInterface::class);
 
         // Seed the database with valid products
         Product::insert([
@@ -26,8 +38,11 @@ class BasketServiceTest extends TestCase
             ['code' => 'B01', 'name' => 'Blue Widget', 'price' => 7.95],
         ]);
 
-        // Initialize BasketService
-        $this->basketService = new BasketService();
+        $this->basketService = new BasketService(
+            $this->productRepository,
+            $this->shippingRuleRepository,
+            $this->pricingStrategy
+        );
     }
 
     #[Test]
@@ -61,4 +76,9 @@ class BasketServiceTest extends TestCase
         $this->assertEquals(0, $total); // Should return 0 as the product is invalid
     }
 
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
 }

@@ -11,12 +11,12 @@ class CartController extends Controller
     protected $basketService;
     protected $productValidator;
 
-    public function __construct(ProductValidator $productValidator)
+    public function __construct(ProductValidator $productValidator, BasketService $basketService)
     {
         $this->productValidator = $productValidator;
 
         // Initialize Basket Service
-        $this->basketService = new BasketService();
+        $this->basketService = $basketService;
     }
 
     /**
@@ -40,11 +40,11 @@ class CartController extends Controller
         }
         
         // Add products to basket
-        $this->basketService->getTotal($productCodes);
+        $totalPrice = $this->basketService->getTotal($productCodes);
 
         // Return total price
         return response()->json([
-           'total' => $this->basketService->total()
+           'total' => $totalPrice
         ]);
     }
 }

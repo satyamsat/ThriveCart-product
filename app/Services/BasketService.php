@@ -1,12 +1,26 @@
 <?php 
 
 namespace App\Services;
-use App\Models\Product;
-use App\Models\DeliveryShippingRule;
+use App\Repositories\ProductRepository;
+use App\Repositories\DeliveryShippingRuleRepository;
+use App\Strategies\PricingStrategyInterface;
 
 class BasketService
 {
     protected $basket = [];
+    protected ProductRepository $productRepository;
+    protected DeliveryShippingRuleRepository $shippingRuleRepository;
+    protected PricingStrategyInterface $pricingStrategy;
+
+    public function __construct(
+        ProductRepository $productRepository,
+        DeliveryShippingRuleRepository $shippingRuleRepository,
+        PricingStrategyInterface $pricingStrategy
+    ) {
+        $this->productRepository = $productRepository;
+        $this->shippingRuleRepository = $shippingRuleRepository;
+        $this->pricingStrategy = $pricingStrategy;
+    }
 
     /**
      * Add a single product code to the basket.
@@ -36,11 +50,11 @@ class BasketService
         
         // Apply product prices
         foreach ($productCount as $code => $quantity) {
-            $product = Product::where('code',$code)->first();
+            $product = $this->productRepository->findByCode($code);
             if(!$product){
                 continue;
             }
-            $subtotal += $this->applyOffers($product, $quantity);
+            $subtotal += $this->pricingStrategy->calculatePrice($product, $quantity);
         }
 
         //If subtotal is zero 
@@ -73,31 +87,11 @@ class BasketService
     }
 
     /**
-     * Apply offers (e.g., buy one get second half price).
-     */
-    protected function applyOffers($product, $quantity)
-    {
-        $price = $product->price;
-        
-        if ($product->code === 'R01' && $quantity > 1) {
-            // Find the number of full-price and half-price items
-            $fullPriceCount = ceil($quantity / 2);  
-            $halfPriceCount = floor($quantity / 2); 
-            $total =  ($fullPriceCount * $price) + ($halfPriceCount * ($price / 2));
-            return bcdiv($total, '1', 2);
-        }
-        return round($quantity * $price,2);
-    }
-
-    /**
      * Calculate delivery cost based on rules.
      */
     protected function calculateDelivery($subtotal)
     {
-        $shipping = DeliveryShippingRule::where('min_amount','<=',$subtotal)->orderBy('min_amount', 'desc')->first();
-        if($shipping){
-            return $shipping->delivery_cost;
-        }
-        return 4.95; // Default to free delivery if no rule applies
+        $shipping = $this->shippingRuleRepository->getApplicableRule($subtotal);
+        return $shipping ? $shipping->delivery_cost : 4.95;
     }
 }
