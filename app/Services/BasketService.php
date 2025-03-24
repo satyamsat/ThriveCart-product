@@ -33,6 +33,7 @@ class BasketService
     {
         $subtotal = 0;
         $productCount = array_count_values($this->basket);
+        
         // Apply product prices
         foreach ($productCount as $code => $quantity) {
             $product = Product::where('code',$code)->first();
@@ -40,6 +41,11 @@ class BasketService
                 continue;
             }
             $subtotal += $this->applyOffers($product, $quantity);
+        }
+
+        //If subtotal is zero 
+        if($subtotal === 0){
+            return 0;
         }
 
         // Apply delivery charges
@@ -55,6 +61,10 @@ class BasketService
         // Reset basket before processing
         $this->basket = [];
         
+        if(count($productCodes) === 0){
+            return (int) 0;
+        }
+
         // Add multiple products
         $this->addMultiple($productCodes);
         
