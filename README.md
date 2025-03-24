@@ -66,3 +66,6 @@ Feature tests validate the full request-response cycle of API endpoints. These t
 ### Running Tests
 To run the tests, use: ```./vendor/bin/sail artisan test```
 This command executes all unit and feature tests, verifying that the basket service and API are functioning as expected.
+
+### Running Test using PHP Stan
+To run the tests, use: ```./vendor/bin/phpstan analyse --memory-limit=512M```
