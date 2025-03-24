@@ -16,6 +16,11 @@ A shopping basket service implementation in Laravel with product management, del
 ## Project Setup
 This project implements a shopping basket service in Laravel. It includes product management, delivery charge rules, and special offers.
 
+## Cloning Repository
+1.  ```git clone https://github.com/satyamsat/ThriveCart-product.git```
+2. cd ThriveCart-product
+3.  ```composer install```
+
 ## Running the Project with Docker
 1. Start Docker containers: ```./vendor/bin/sail up -d```
 2. Run database migrations and seed the database: ```./vendor/bin/sail artisan migrate --seed```
