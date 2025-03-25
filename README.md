@@ -22,7 +22,7 @@ This project implements a shopping basket service in Laravel. It includes produc
 3.  ```composer install```
 4. Copy .env.example to .env and update it: ```cp .env.example .env```
 5. Update database connection : 
-```DB_CONNECTION=mysql
+DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=laravel
