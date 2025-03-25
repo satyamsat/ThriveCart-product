@@ -1,6 +1,7 @@
-# Laravel Basket Service
+# Acme Widget Co
 
 ![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
+![PHPStan](https://img.shields.io/badge/PHPStan-8A2BE2?style=for-the-badge)
 
 A shopping basket service implementation in Laravel with product management, delivery charge rules, and special offers.
 
@@ -22,13 +23,14 @@ This project implements a shopping basket service in Laravel. It includes produc
 3.  ```composer install```
 4. Copy .env.example to .env and update it: ```cp .env.example .env```
 5. Update database connection : 
-```DB_CONNECTION=mysql
+```ini
+DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=laravel
 DB_USERNAME=sail
 DB_PASSWORD=password
-
+```
 
 ## Running the Project with Docker
 1. Start Docker containers: ```./vendor/bin/sail up -d```
