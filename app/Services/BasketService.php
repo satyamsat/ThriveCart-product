@@ -11,7 +11,12 @@ class BasketService
     protected ProductRepository $productRepository;
     protected DeliveryShippingRuleRepository $shippingRuleRepository;
     protected PricingStrategyInterface $pricingStrategy;
-
+    
+    /**
+     * @param \App\Repositories\ProductRepository $productRepository
+     * @param \App\Repositories\DeliveryShippingRuleRepository $shippingRuleRepository
+     * @param \App\Strategies\PricingStrategyInterface $pricingStrategy
+     */
     public function __construct(
         ProductRepository $productRepository,
         DeliveryShippingRuleRepository $shippingRuleRepository,
@@ -23,17 +28,19 @@ class BasketService
     }
 
     /**
-     * Add a single product code to the basket.
+     * @param string $productCode
+     * @return void
      */
-    public function add(string $productCode)
+    public function add(string $productCode): void
     {
         $this->basket[] = $productCode;
     }
 
     /**
-     * Add multiple products at once.
+     * @param array $productCodes
+     * @return void
      */
-    public function addMultiple(array $productCodes)
+    public function addMultiple(array $productCodes): void    
     {
         foreach ($productCodes as $code) {
             $this->add($code);
@@ -41,9 +48,9 @@ class BasketService
     }
 
     /**
-     * Get the total cost of the basket, applying discounts and delivery rules.
+     * @return float|int
      */
-    public function total()
+    public function total(): float|int 
     {
         $subtotal = 0;
         $productCount = array_count_values($this->basket);
@@ -68,9 +75,10 @@ class BasketService
     }
 
     /**
-     * New method: Get total price for multiple products at once.
+     * @param array $productCodes
+     * @return float|int
      */
-    public function getTotal(array $productCodes)
+    public function getTotal(array $productCodes): float|int   
     {
         // Reset basket before processing
         $this->basket = [];
@@ -87,9 +95,10 @@ class BasketService
     }
 
     /**
-     * Calculate delivery cost based on rules.
+     * @param mixed $subtotal
+     * @return float
      */
-    protected function calculateDelivery($subtotal)
+    protected function calculateDelivery($subtotal): float
     {
         $shipping = $this->shippingRuleRepository->getApplicableRule($subtotal);
         return $shipping ? $shipping->delivery_cost : 4.95;

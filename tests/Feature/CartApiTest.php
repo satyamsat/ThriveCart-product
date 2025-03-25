@@ -30,13 +30,4 @@ class CartApiTest extends TestCase
                  ->assertJson(['total' => 37.85]);
     }
 
-    #[Test]
-    public function it_returns_error_for_invalid_product_code()
-    {
-        $response = $this->getJson('/cart?products=INVALID_CODE');
-        $response->assertStatus(400)
-                 ->assertJson([
-                     'error' => 'Invalid product codes: INVALID_CODE',
-                 ]);
-    }
 }

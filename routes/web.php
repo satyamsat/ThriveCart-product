@@ -7,4 +7,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/cart', [CartController::class, 'getTotal']);
+Route::get('/cart', [CartController::class, 'getTotalCartPrice']);

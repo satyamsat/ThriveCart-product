@@ -26,12 +26,10 @@ class BasketServiceTest extends TestCase
     {
         parent::setUp();
 
-        // Create mock repositories
         $this->productRepository = app(ProductRepository::class);
         $this->shippingRuleRepository = app(DeliveryShippingRuleRepository::class);
         $this->pricingStrategy = app(PricingStrategyInterface::class);
 
-        // Seed the database with valid products
         Product::insert([
             ['code' => 'R01', 'name' => 'Red Widget', 'price' => 32.95],
             ['code' => 'G01', 'name' => 'Green Widget', 'price' => 24.95],
@@ -67,7 +65,7 @@ class BasketServiceTest extends TestCase
 
         $this->assertEquals(0, $total);
     }
-
+    
     #[Test]
     public function it_handles_invalid_product_codes()
     {
@@ -76,9 +74,4 @@ class BasketServiceTest extends TestCase
         $this->assertEquals(0, $total); // Should return 0 as the product is invalid
     }
 
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
 }

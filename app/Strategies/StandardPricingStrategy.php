@@ -6,6 +6,11 @@ use App\Models\Product;
 
 class StandardPricingStrategy implements PricingStrategyInterface
 {
+    /**
+     * @param \App\Models\Product $product
+     * @param int $quantity
+     * @return float
+     */
     public function calculatePrice(Product $product, int $quantity): float
     {
         if ($product->code === 'R01' && $quantity > 1) {
