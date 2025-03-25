@@ -34,6 +34,7 @@ DB_PASSWORD=password
 
 ## Running the Project with Docker
 1. Start Docker containers: ```./vendor/bin/sail up -d```
+Note : If the docker fails try changing ports in docker-compose.yml file , try building ```./vendor/bin/sail up --build```.
 2. Generate App Key ```./vendor/bin/sail artisan key:generate```
 2. Run database migrations and seed the database: ```./vendor/bin/sail artisan migrate --seed```
 
