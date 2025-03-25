@@ -20,9 +20,19 @@ This project implements a shopping basket service in Laravel. It includes produc
 1.  ```git clone https://github.com/satyamsat/ThriveCart-product.git```
 2. cd ThriveCart-product
 3.  ```composer install```
+4. Copy .env.example to .env and update it: ```cp .env.example .env```
+5. Update database connection : 
+```DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password```
+
 
 ## Running the Project with Docker
 1. Start Docker containers: ```./vendor/bin/sail up -d```
+2. Generate App Key ```./vendor/bin/sail artisan key:generate```
 2. Run database migrations and seed the database: ```./vendor/bin/sail artisan migrate --seed```
 
 ## BasketService.php Overview
